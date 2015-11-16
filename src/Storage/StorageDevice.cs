@@ -56,10 +56,13 @@ namespace Microsoft.Xna.Framework.Storage
 			get
 			{
 				if (	Game.Instance.Platform.OSVersion.Equals("Linux") ||
-					Game.Instance.Platform.OSVersion.Equals("Mac OS X")	)
+					Game.Instance.Platform.OSVersion.Equals("Mac OS X") ||
+                    Game.Instance.Platform.OSVersion.Equals("Android")	)
 				{
 					/* Linux and Mac use locally connected storage in the user's
 					 * home location, which should always be "connected".
+                     * For Android to get this far, the medium with the game must
+                     * be mounted, so it's also always connected.
 					 */
 					return true;
 				}
@@ -408,6 +411,11 @@ namespace Microsoft.Xna.Framework.Storage
 				}
 				return osConfigDir;
 			}
+            if (Game.Instance.Platform.OSVersion.Equals("Android"))
+            {
+                //Screw you, Android - use the binary path.
+                return ".";
+            }
 			throw new Exception("StorageDevice: Platform.OSVersion not handled!");
 		}
 
