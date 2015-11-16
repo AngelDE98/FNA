@@ -283,7 +283,7 @@ namespace Microsoft.Xna.Framework.Audio
 			TimeSpan resultDur = TimeSpan.FromSeconds(
 				bufLen /
 				((bits > 0d ? ((double) bits) : 24d) / 8d) /
-				(channels > 0d ? ((double) channels) : 2d) /
+				channels /
 				((double) sampleRate)
 			);
 
