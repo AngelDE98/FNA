@@ -231,6 +231,18 @@ namespace Microsoft.Xna.Framework.Input
 					result.Append((char) resChar[7]);
 				}
 			}
+            else if (Game.Instance.Platform.OSVersion.Equals("Android"))
+			{
+                //Android is weird... starts with 4___, ends with 726f. Let's pick that!
+				result.Append((char) resChar[1]);
+				result.Append((char) resChar[2]);
+				result.Append((char) resChar[3]);
+				result.Append((char) resChar[4]);
+				result.Append((char) resChar[28]);
+				result.Append((char) resChar[29]);
+				result.Append((char) resChar[30]);
+				result.Append((char) resChar[31]);
+			}
 			else
 			{
 				throw new Exception("SDL2_GamePad: Platform.OSVersion not handled!");

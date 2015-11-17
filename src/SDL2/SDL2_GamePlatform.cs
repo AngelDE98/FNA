@@ -541,6 +541,14 @@ namespace Microsoft.Xna.Framework
 			) == 1) {
 				GamePad.INTERNAL_AddInstance(evt[0].cdevice.which);
 			}
+            
+            //Sometimes Android hates us. Sometimes it hates us horribly. And sometimes THIS happens!
+            if (OSVersion.Equals("Android")) {
+                int numJoysticks = SDL.SDL_NumJoysticks();
+                for (int i = 0; i < numJoysticks; i++) {
+                    GamePad.INTERNAL_AddInstance(i);
+                }
+            }
 		}
 
 		public override bool BeforeUpdate(GameTime gameTime)
