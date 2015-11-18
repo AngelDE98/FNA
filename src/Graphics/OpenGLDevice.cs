@@ -8,7 +8,7 @@
 #endregion
 
 #region DISABLE_FAUXBACKBUFFER Option
-// #define DISABLE_FAUXBACKBUFFER
+#define DISABLE_FAUXBACKBUFFER
 /* If you want to debug GL without the extra FBO in your way, you can use this.
  * Note that we only enable a faux-backbuffer when the window size is not equal
  * to the backbuffer size!
@@ -33,7 +33,7 @@
 #endregion
 
 #region DISABLE_THREADING Option
-// #define DISABLE_THREADING
+#define DISABLE_THREADING
 /* Perhaps you read the above option and thought to yourself:
  * "Wow, only an idiot would need threads for their graphics code!"
  *
