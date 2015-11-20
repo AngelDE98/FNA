@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Framework
         //it's required to remove all references to the
         //ZIP to allow the GC to call Finalize().
         //-ade 
-        static internal Object Zip
+        static internal object Zip
 		{
 			get;
 			private set;

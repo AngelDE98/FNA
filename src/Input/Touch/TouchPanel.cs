@@ -182,6 +182,15 @@ namespace Microsoft.Xna.Framework.Input.Touch
 		) {
 			AddEvent(id, state, position, false);
 		}
+        
+        internal static void AddEvent(
+			int id,
+			TouchLocationState state,
+			Vector2 position,
+            float pressure
+		) {
+			AddEvent(id, state, position, pressure, false);
+		}
 
 		internal static void AddEvent(
 			int id,
@@ -189,10 +198,21 @@ namespace Microsoft.Xna.Framework.Input.Touch
 			Vector2 position,
 			bool isMouse
 		) {
+			AddEvent(id, state, position, 1f, isMouse);
+		}
+        
+        internal static void AddEvent(
+			int id,
+			TouchLocationState state,
+			Vector2 position,
+            float pressure,
+			bool isMouse
+		) {
 			PrimaryWindow.TouchPanelState.AddEvent(
 				id,
 				state,
 				position,
+                pressure,
 				isMouse
 			);
 		}
