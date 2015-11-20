@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Framework
 
 		#region Internal Constructor
 
-		internal SDL2_GameWindow(bool useES2, bool useCoreProfile)
+		internal SDL2_GameWindow(bool useES2, bool useES3, bool useCoreProfile)
 		{
 			SDL.SDL_WindowFlags initFlags = (
 				SDL.SDL_WindowFlags.SDL_WINDOW_OPENGL |
@@ -178,7 +178,7 @@ namespace Microsoft.Xna.Framework
 			SDL.SDL_GL_SetAttribute(SDL.SDL_GLattr.SDL_GL_DEPTH_SIZE, 24);
 			SDL.SDL_GL_SetAttribute(SDL.SDL_GLattr.SDL_GL_STENCIL_SIZE, 8);
 			SDL.SDL_GL_SetAttribute(SDL.SDL_GLattr.SDL_GL_DOUBLEBUFFER, 1);
-			if (useES2)
+			if (useES2 || useES3)
 			{
 				SDL.SDL_GL_SetAttribute(
 					SDL.SDL_GLattr.SDL_GL_RETAINED_BACKING,
@@ -190,7 +190,7 @@ namespace Microsoft.Xna.Framework
 				);
 				SDL.SDL_GL_SetAttribute(
 					SDL.SDL_GLattr.SDL_GL_CONTEXT_MAJOR_VERSION,
-					2
+					useES2 ? 2 : useES3 ? 3 : 0 /* Maybe pass an int via useES instead? */
 				);
 				SDL.SDL_GL_SetAttribute(
 					SDL.SDL_GLattr.SDL_GL_CONTEXT_MINOR_VERSION,

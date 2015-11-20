@@ -534,6 +534,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		#region Private Profile-specific Variables
 
 		private bool useES2;
+        private bool useES3;
 		private bool useCoreProfile;
 		private uint vao;
 
@@ -592,6 +593,8 @@ namespace Microsoft.Xna.Framework.Graphics
 			int es2Flag = (int) SDL.SDL_GLprofile.SDL_GL_CONTEXT_PROFILE_ES;
 			SDL.SDL_GL_GetAttribute(SDL.SDL_GLattr.SDL_GL_CONTEXT_PROFILE_MASK, out flags);
 			useES2 = (flags & es2Flag) == es2Flag;
+            SDL.SDL_GL_GetAttribute(SDL.SDL_GLattr.SDL_GL_CONTEXT_MAJOR_VERSION, out flags);
+            useES3 = flags == 3;
 
 			// Check for a possible Core context
 			int coreFlag = (int) SDL.SDL_GLprofile.SDL_GL_CONTEXT_PROFILE_CORE;
