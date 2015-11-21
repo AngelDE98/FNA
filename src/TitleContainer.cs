@@ -92,8 +92,8 @@ namespace Microsoft.Xna.Framework
         
         internal static MethodInfo m_ZipArchive_GetEntry;
         internal static object[] arg_ZipArchive_GetEntry = new object[1];
-        internal static MethodInfo m_ZipEntry_Open;
-        internal static object[] arg_ZipEntry_Open = new object[0];
+        internal static MethodInfo m_ZipArchiveEntry_Open;
+        internal static object[] arg_ZipArchiveEntry_Open = new object[0];
         
         #endregion
 #endif
@@ -123,16 +123,37 @@ namespace Microsoft.Xna.Framework
                         break;
                     }
                 }
-                //Assembly not found? Time to use Assembly.LoadFrom
+                //Assembly not found? Time to use Assembly.Load
                 if (a_System_IO_Compression == null) {
-                    a_System_IO_Compression = Assembly.LoadFrom("System.IO.Compression.dll");
+                    a_System_IO_Compression = Assembly.Load("System.IO.Compression, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
                     //If it's not found, don't worry: The game will just crash telling you about it.
+                }
+                if (a_System_IO_Compression == null) {
+                    //If it's not found and the game didn't crash, screw this
+                    Console.WriteLine("FNA_CONTENT_FORCE_ZIP: Assembly not found.");
+                    return;
                 }
                 //Get the types and methods
                 Type t_ZipArchive = a_System_IO_Compression.GetType("System.IO.Compression.ZipArchive");
-                Type t_ZipEntry = a_System_IO_Compression.GetType("System.IO.Compression.ZipEntry");
+                if (t_ZipArchive == null) {
+                    Console.WriteLine("FNA_CONTENT_FORCE_ZIP: ZipArchive not found.");
+                    return;
+                }
+                Type t_ZipArchiveEntry = a_System_IO_Compression.GetType("System.IO.Compression.ZipArchiveEntry");
+                if (t_ZipArchiveEntry == null) {
+                    Console.WriteLine("FNA_CONTENT_FORCE_ZIP: ZipArchiveEntry not found.");
+                    return;
+                }
                 m_ZipArchive_GetEntry = t_ZipArchive.GetMethod("GetEntry", new Type[] {typeof(string)});
-                m_ZipEntry_Open = t_ZipEntry.GetMethod("Open", new Type[0]);
+                if (m_ZipArchive_GetEntry == null) {
+                    Console.WriteLine("FNA_CONTENT_FORCE_ZIP: ZipArchive.GetEntry not found.");
+                    return;
+                }
+                m_ZipArchiveEntry_Open = t_ZipArchiveEntry.GetMethod("Open", new Type[0]);
+                if (m_ZipArchive_GetEntry == null) {
+                    Console.WriteLine("FNA_CONTENT_FORCE_ZIP: ZipArchiveEntry.Open not found.");
+                    return;
+                }
                 //FINALLY call the constructor
                 //As the doc says "The stream that contains the archive to be read", we simply skip the ZipArchiveMode
                 Zip = t_ZipArchive.GetConstructor(new Type[] {typeof(Stream)}).Invoke(new object[] {File.OpenRead(forcedZip)});
@@ -172,9 +193,9 @@ namespace Microsoft.Xna.Framework
                 #else
                 //4.5+ with 4.0 as build target because reasons
                 arg_ZipArchive_GetEntry[0] = safeName;
-                object o_ZipEntry = m_ZipArchive_GetEntry.Invoke(Zip, arg_ZipArchive_GetEntry);
-                System.Console.WriteLine("TitleContainer.OpenStream entry: " + o_ZipEntry);
-                return (Stream) m_ZipEntry_Open.Invoke(o_ZipEntry, arg_ZipEntry_Open);
+                object o_ZipArchiveEntry = m_ZipArchive_GetEntry.Invoke(Zip, arg_ZipArchive_GetEntry);
+                System.Console.WriteLine("TitleContainer.OpenStream entry: " + o_ZipArchiveEntry);
+                return (Stream) m_ZipArchiveEntry_Open.Invoke(o_ZipArchiveEntry, arg_ZipArchiveEntry_Open);
                 #endif
                 #if ENABLE_ZIPPING || ENABLE_ZIPPING_REFLECTION
             }
