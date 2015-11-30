@@ -8,7 +8,7 @@
 #endregion
 
 #region DISABLE_FAUXBACKBUFFER Option
-#define DISABLE_FAUXBACKBUFFER
+// #define DISABLE_FAUXBACKBUFFER
 /* If you want to debug GL without the extra FBO in your way, you can use this.
  * Note that we only enable a faux-backbuffer when the window size is not equal
  * to the backbuffer size!
@@ -33,7 +33,7 @@
 #endregion
 
 #region DISABLE_THREADING Option
-#define DISABLE_THREADING
+// #define DISABLE_THREADING
 /* Perhaps you read the above option and thought to yourself:
  * "Wow, only an idiot would need threads for their graphics code!"
  *
@@ -534,7 +534,6 @@ namespace Microsoft.Xna.Framework.Graphics
 		#region Private Profile-specific Variables
 
 		private bool useES2;
-        private bool useES3;
 		private bool useCoreProfile;
 		private uint vao;
 
@@ -593,8 +592,6 @@ namespace Microsoft.Xna.Framework.Graphics
 			int es2Flag = (int) SDL.SDL_GLprofile.SDL_GL_CONTEXT_PROFILE_ES;
 			SDL.SDL_GL_GetAttribute(SDL.SDL_GLattr.SDL_GL_CONTEXT_PROFILE_MASK, out flags);
 			useES2 = (flags & es2Flag) == es2Flag;
-            SDL.SDL_GL_GetAttribute(SDL.SDL_GLattr.SDL_GL_CONTEXT_MAJOR_VERSION, out flags);
-            useES3 = flags == 3;
 
 			// Check for a possible Core context
 			int coreFlag = (int) SDL.SDL_GLprofile.SDL_GL_CONTEXT_PROFILE_CORE;
@@ -3891,19 +3888,19 @@ namespace Microsoft.Xna.Framework.Graphics
 
 			public static readonly GLenum[] TextureInternalFormat = new GLenum[]
 			{
-				GLenum.GL_RGBA,					// SurfaceFormat.Color
-				GLenum.GL_RGB,					// SurfaceFormat.Bgr565
-				GLenum.GL_RGBA,					// SurfaceFormat.Bgra5551
+				GLenum.GL_RGBA8,				// SurfaceFormat.Color
+				GLenum.GL_RGB8,					// SurfaceFormat.Bgr565
+				GLenum.GL_RGB5_A1,				// SurfaceFormat.Bgra5551
 				GLenum.GL_RGBA4,				// SurfaceFormat.Bgra4444
 				GLenum.GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,	// SurfaceFormat.Dxt1
 				GLenum.GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,	// SurfaceFormat.Dxt3
 				GLenum.GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,	// SurfaceFormat.Dxt5
-				GLenum.GL_RG,					// SurfaceFormat.NormalizedByte2
-				GLenum.GL_RGBA,					// SurfaceFormat.NormalizedByte4
+				GLenum.GL_RG8,					// SurfaceFormat.NormalizedByte2
+				GLenum.GL_RGBA8,				// SurfaceFormat.NormalizedByte4
 				GLenum.GL_RGB10_A2_EXT,				// SurfaceFormat.Rgba1010102
 				GLenum.GL_RG16,					// SurfaceFormat.Rg32
 				GLenum.GL_RGBA16,				// SurfaceFormat.Rgba64
-				GLenum.GL_LUMINANCE,				// SurfaceFormat.Alpha8
+				GLenum.GL_LUMINANCE8,				// SurfaceFormat.Alpha8
 				GLenum.GL_R32F,					// SurfaceFormat.Single
 				GLenum.GL_RG32F,				// SurfaceFormat.Vector2
 				GLenum.GL_RGBA32F,				// SurfaceFormat.Vector4
@@ -4222,7 +4219,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					glDevice.glRenderbufferStorageMultisample(
 						GLenum.GL_RENDERBUFFER,
 						multiSampleCount,
-						GLenum.GL_RGBA,
+						GLenum.GL_RGBA8,
 						width,
 						height
 					);
@@ -4231,7 +4228,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				{
 					glDevice.glRenderbufferStorage(
 						GLenum.GL_RENDERBUFFER,
-						GLenum.GL_RGBA,
+						GLenum.GL_RGBA8,
 						width,
 						height
 					);
@@ -4271,7 +4268,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				{
 					glDevice.glRenderbufferStorage(
 						GLenum.GL_RENDERBUFFER,
-						GLenum.GL_DEPTH24_STENCIL8,
+						XNAToGL.DepthStorage[(int) depthFormat],
 						width,
 						height
 					);
@@ -4374,7 +4371,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					glDevice.glRenderbufferStorageMultisample(
 						GLenum.GL_RENDERBUFFER,
 						MultiSampleCount,
-						GLenum.GL_RGBA,
+						GLenum.GL_RGBA8,
 						Width,
 						Height
 					);
@@ -4383,7 +4380,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				{
 					glDevice.glRenderbufferStorage(
 						GLenum.GL_RENDERBUFFER,
-						GLenum.GL_RGBA,
+						GLenum.GL_RGBA8,
 						Width,
 						Height
 					);
