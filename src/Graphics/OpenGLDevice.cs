@@ -2450,7 +2450,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					glTexImage2D(
 						GLenum.GL_TEXTURE_2D,
 						i,
-						(int) glInternalFormat,
+						useES2 ? (int) glFormat : (int) glInternalFormat,
 						Math.Max(width >> i, 1),
 						Math.Max(height >> i, 1),
 						0,
@@ -2494,7 +2494,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				glTexImage3D(
 					GLenum.GL_TEXTURE_3D,
 					i,
-					(int) glInternalFormat,
+					useES2 ? (int) glFormat : (int) glInternalFormat,
 					Math.Max(width >> i, 1),
 					Math.Max(height >> i, 1),
 					depth,
@@ -2561,7 +2561,7 @@ namespace Microsoft.Xna.Framework.Graphics
 						glTexImage2D(
 							GLenum.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
 							l,
-							(int) glInternalFormat,
+							useES2 ? (int) glFormat : (int) glInternalFormat,
 							levelSize,
 							levelSize,
 							0,
