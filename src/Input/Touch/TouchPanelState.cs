@@ -278,11 +278,21 @@ namespace Microsoft.Xna.Framework.Input.Touch
 		) {
 			AddEvent(id, state, position, false);
 		}
+        
+        internal void AddEvent(
+			int id,
+			TouchLocationState state,
+			Vector2 position,
+            bool isMouse
+		) {
+			AddEvent(id, state, position, 1f, isMouse);
+		}
 
 		internal void AddEvent(
 			int id,
 			TouchLocationState state,
 			Vector2 position,
+            float pressure,
 			bool isMouse
 		) {
 			/* Different platforms return different touch identifiers
@@ -330,6 +340,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 					touchId,
 					state,
 					position * touchScale,
+                    pressure,
 					CurrentTimestamp
 				);
 
@@ -386,6 +397,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 								touch.Id,
 								TouchLocationState.Released,
 								touch.Position,
+                                0f,
 								CurrentTimestamp
 							)
 						);
@@ -404,6 +416,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 								touch.Id,
 								TouchLocationState.Released,
 								touch.Position,
+                                0f,
 								CurrentTimestamp
 							)
 						);

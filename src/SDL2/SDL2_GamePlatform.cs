@@ -43,9 +43,10 @@ using SDL2;
 
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 #endregion
-
-namespace Microsoft.Xna.Framework
+namespace 
+Microsoft.Xna.Framework
 {
 	class SDL2_GamePlatform : GamePlatform
 	{
