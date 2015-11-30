@@ -16,37 +16,19 @@ using System.Globalization;
 
 namespace Microsoft.Xna.Framework.Design
 {
-	public class Vector2Converter : MathTypeConverter
+	public class PlaneConverter : MathTypeConverter
 	{
 		#region Public Constructor
 
-		public Vector2Converter() : base()
+		public PlaneConverter() : base()
 		{
 			// FIXME: Initialize propertyDescriptions... how? -flibit
+			supportStringConvert = false;
 		}
 
 		#endregion
 
 		#region Public Methods
-
-		public override object ConvertFrom(
-			ITypeDescriptorContext context,
-			CultureInfo culture,
-			object value
-		) {
-			string s = value as string;
-			if (s != null)
-			{
-				string[] v = s.Split(
-					culture.NumberFormat.NumberGroupSeparator.ToCharArray()
-				);
-				return new Vector2(
-					float.Parse(v[0], culture),
-					float.Parse(v[1], culture)
-				);
-			}
-			return base.ConvertFrom(context, culture, value);
-		}
 
 		public override object ConvertTo(
 			ITypeDescriptorContext context,
@@ -54,18 +36,7 @@ namespace Microsoft.Xna.Framework.Design
 			object value,
 			Type destinationType
 		) {
-			if (destinationType == typeof(string))
-			{
-				Vector2 vec = (Vector2) value;
-				return string.Join(
-					culture.NumberFormat.NumberGroupSeparator,
-					new string[]
-					{
-						vec.X.ToString(culture),
-						vec.Y.ToString(culture)
-					}
-				);
-			}
+			// FIXME: This method exists in the spec, but... why?! -flibit
 			return base.ConvertTo(context, culture, value, destinationType);
 		}
 
@@ -73,9 +44,9 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new Vector2(
-				(float) propertyValues["X"],
-				(float) propertyValues["Y"]
+			return (object) new Plane(
+				(Vector3) propertyValues["Normal"],
+				(float) propertyValues["D"]
 			);
 		}
 

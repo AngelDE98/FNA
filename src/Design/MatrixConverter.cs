@@ -16,37 +16,19 @@ using System.Globalization;
 
 namespace Microsoft.Xna.Framework.Design
 {
-	public class Vector2Converter : MathTypeConverter
+	public class MatrixConverter : MathTypeConverter
 	{
 		#region Public Constructor
 
-		public Vector2Converter() : base()
+		public MatrixConverter() : base()
 		{
 			// FIXME: Initialize propertyDescriptions... how? -flibit
+			supportStringConvert = false;
 		}
 
 		#endregion
 
 		#region Public Methods
-
-		public override object ConvertFrom(
-			ITypeDescriptorContext context,
-			CultureInfo culture,
-			object value
-		) {
-			string s = value as string;
-			if (s != null)
-			{
-				string[] v = s.Split(
-					culture.NumberFormat.NumberGroupSeparator.ToCharArray()
-				);
-				return new Vector2(
-					float.Parse(v[0], culture),
-					float.Parse(v[1], culture)
-				);
-			}
-			return base.ConvertFrom(context, culture, value);
-		}
 
 		public override object ConvertTo(
 			ITypeDescriptorContext context,
@@ -54,18 +36,7 @@ namespace Microsoft.Xna.Framework.Design
 			object value,
 			Type destinationType
 		) {
-			if (destinationType == typeof(string))
-			{
-				Vector2 vec = (Vector2) value;
-				return string.Join(
-					culture.NumberFormat.NumberGroupSeparator,
-					new string[]
-					{
-						vec.X.ToString(culture),
-						vec.Y.ToString(culture)
-					}
-				);
-			}
+			// FIXME: This method exists in the spec, but... why?! -flibit
 			return base.ConvertTo(context, culture, value, destinationType);
 		}
 
@@ -73,9 +44,23 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new Vector2(
-				(float) propertyValues["X"],
-				(float) propertyValues["Y"]
+			return (object) new Matrix(
+				(float) propertyValues["M11"],
+				(float) propertyValues["M12"],
+				(float) propertyValues["M13"],
+				(float) propertyValues["M14"],
+				(float) propertyValues["M21"],
+				(float) propertyValues["M22"],
+				(float) propertyValues["M23"],
+				(float) propertyValues["M24"],
+				(float) propertyValues["M31"],
+				(float) propertyValues["M32"],
+				(float) propertyValues["M33"],
+				(float) propertyValues["M34"],
+				(float) propertyValues["M41"],
+				(float) propertyValues["M42"],
+				(float) propertyValues["M43"],
+				(float) propertyValues["M44"]
 			);
 		}
 

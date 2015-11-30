@@ -13,7 +13,6 @@ using System.IO;
 
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 #endregion
 
 namespace Microsoft.Xna.Framework
@@ -74,7 +73,6 @@ namespace Microsoft.Xna.Framework
 				if (_window == null)
 				{
 					Mouse.WindowHandle = value.Handle;
-					TouchPanel.PrimaryWindow = value;
 				}
 
 				_window = value;
@@ -292,7 +290,10 @@ namespace Microsoft.Xna.Framework
 			Stream stream,
 			out int width,
 			out int height,
-			out byte[] pixels
+			out byte[] pixels,
+			int reqWidth = -1,
+			int reqHeight = -1,
+			bool zoom = false
 		);
 
 		internal abstract void SavePNG(
@@ -356,7 +357,6 @@ namespace Microsoft.Xna.Framework
 			if (!disposed)
 			{
 				Mouse.WindowHandle = IntPtr.Zero;
-				TouchPanel.PrimaryWindow = null;
 
 				disposed = true;
 			}

@@ -16,11 +16,11 @@ using System.Globalization;
 
 namespace Microsoft.Xna.Framework.Design
 {
-	public class Vector2Converter : MathTypeConverter
+	public class QuaternionConverter : MathTypeConverter
 	{
 		#region Public Constructor
 
-		public Vector2Converter() : base()
+		public QuaternionConverter() : base()
 		{
 			// FIXME: Initialize propertyDescriptions... how? -flibit
 		}
@@ -40,9 +40,11 @@ namespace Microsoft.Xna.Framework.Design
 				string[] v = s.Split(
 					culture.NumberFormat.NumberGroupSeparator.ToCharArray()
 				);
-				return new Vector2(
+				return new Quaternion(
 					float.Parse(v[0], culture),
-					float.Parse(v[1], culture)
+					float.Parse(v[1], culture),
+					float.Parse(v[2], culture),
+					float.Parse(v[3], culture)
 				);
 			}
 			return base.ConvertFrom(context, culture, value);
@@ -56,13 +58,15 @@ namespace Microsoft.Xna.Framework.Design
 		) {
 			if (destinationType == typeof(string))
 			{
-				Vector2 vec = (Vector2) value;
+				Quaternion quat = (Quaternion) value;
 				return string.Join(
 					culture.NumberFormat.NumberGroupSeparator,
 					new string[]
 					{
-						vec.X.ToString(culture),
-						vec.Y.ToString(culture)
+						quat.X.ToString(culture),
+						quat.Y.ToString(culture),
+						quat.Z.ToString(culture),
+						quat.W.ToString(culture)
 					}
 				);
 			}
@@ -73,9 +77,11 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new Vector2(
+			return (object) new Quaternion(
 				(float) propertyValues["X"],
-				(float) propertyValues["Y"]
+				(float) propertyValues["Y"],
+				(float) propertyValues["Z"],
+				(float) propertyValues["W"]
 			);
 		}
 
