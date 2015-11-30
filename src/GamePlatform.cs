@@ -13,9 +13,10 @@ using System.IO;
 
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 #endregion
-
-namespace Microsoft.Xna.Framework
+namespace 
+Microsoft.Xna.Framework
 {
 	abstract class GamePlatform : IDisposable
 	{
@@ -73,6 +74,7 @@ namespace Microsoft.Xna.Framework
 				if (_window == null)
 				{
 					Mouse.WindowHandle = value.Handle;
+                    TouchPanel.PrimaryWindow = value;
 				}
 
 				_window = value;
@@ -357,6 +359,7 @@ namespace Microsoft.Xna.Framework
 			if (!disposed)
 			{
 				Mouse.WindowHandle = IntPtr.Zero;
+                TouchPanel.PrimaryWindow = null;
 
 				disposed = true;
 			}
