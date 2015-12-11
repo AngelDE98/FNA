@@ -254,9 +254,20 @@ namespace Microsoft.Xna.Framework.Graphics
 			{
 				if (value != multisampleMask && supportsMultisampling)
 				{
+					if (value == -1)
+					{
+						glDisable(GLenum.GL_SAMPLE_MASK);
+					}
+					else
+					{
+						if (multisampleMask == -1)
+						{
+							glEnable(GLenum.GL_SAMPLE_MASK);
+						}
+						// FIXME: index...? -flibit
+						glSampleMaski(0, (uint) value);
+					}
 					multisampleMask = value;
-					// FIXME: index...? -flibit
-					glSampleMaski(0, (uint) multisampleMask);
 				}
 			}
 		}
@@ -348,6 +359,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		private FillMode fillMode = FillMode.Solid;
 		private float depthBias = 0.0f;
 		private float slopeScaleDepthBias = 0.0f;
+		private bool multiSampleEnable = true;
 
 		#endregion
 
@@ -1392,9 +1404,20 @@ namespace Microsoft.Xna.Framework.Graphics
 
 			if (blendState.MultiSampleMask != multisampleMask && supportsMultisampling)
 			{
+				if (blendState.MultiSampleMask == -1)
+				{
+					glDisable(GLenum.GL_SAMPLE_MASK);
+				}
+				else
+				{
+					if (multisampleMask == -1)
+					{
+						glEnable(GLenum.GL_SAMPLE_MASK);
+					}
+					// FIXME: index...? -flibit
+					glSampleMaski(0, (uint) blendState.MultiSampleMask);
+				}
 				multisampleMask = blendState.MultiSampleMask;
-				// FIXME: index...? -flibit
-				glSampleMaski(0, (uint) multisampleMask);
 			}
 		}
 
@@ -1539,11 +1562,6 @@ namespace Microsoft.Xna.Framework.Graphics
 				if ((actualMode == CullMode.None) != (cullFrontFace == CullMode.None))
 				{
 					ToggleGLState(GLenum.GL_CULL_FACE, actualMode != CullMode.None);
-					if (actualMode != CullMode.None)
-					{
-						// FIXME: XNA/FNA-specific behavior? -flibit
-						glCullFace(GLenum.GL_BACK);
-					}
 				}
 				cullFrontFace = actualMode;
 				if (cullFrontFace != CullMode.None)
@@ -1590,6 +1608,21 @@ namespace Microsoft.Xna.Framework.Graphics
 				}
 				depthBias = realDepthBias;
 				slopeScaleDepthBias = rasterizerState.SlopeScaleDepthBias;
+			}
+
+			/* FIXME: This doesn't actually work on like 99% of setups!
+			 * For whatever reason people decided that they didn't have to obey
+			 * GL_MULTISAMPLE's value when it was disabled.
+			 *
+			 * If they could do it for D3D9 I fail to see why they couldn't for
+			 * OpenGL. Idiots.
+			 *
+			 * -flibit
+			 */
+			if (rasterizerState.MultiSampleAntiAlias != multiSampleEnable)
+			{
+				multiSampleEnable = rasterizerState.MultiSampleAntiAlias;
+				ToggleGLState(GLenum.GL_MULTISAMPLE, multiSampleEnable);
 			}
 		}
 
@@ -2497,7 +2530,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					useES2 ? (int) glFormat : (int) glInternalFormat,
 					Math.Max(width >> i, 1),
 					Math.Max(height >> i, 1),
-					depth,
+					Math.Max(depth >> i, 1),
 					0,
 					glFormat,
 					glType,
@@ -3406,7 +3439,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				glRenderbufferStorageMultisample(
 					GLenum.GL_RENDERBUFFER,
 					multiSampleCount,
-					XNAToGL.TextureFormat[(int) format],
+					XNAToGL.TextureInternalFormat[(int) format],
 					width,
 					height
 				);
@@ -3415,7 +3448,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			{
 				glRenderbufferStorage(
 					GLenum.GL_RENDERBUFFER,
-					XNAToGL.TextureFormat[(int) format],
+					XNAToGL.TextureInternalFormat[(int) format],
 					width,
 					height
 				);

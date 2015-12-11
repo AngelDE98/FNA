@@ -190,7 +190,9 @@ namespace Microsoft.Xna.Framework.Graphics
 			GL_QUERY_RESULT_AVAILABLE =		0x8867,
 			GL_SAMPLES_PASSED =			0x8914,
 			// Multisampling
+			GL_MULTISAMPLE =			0x809D,
 			GL_MAX_SAMPLES =			0x8D57,
+			GL_SAMPLE_MASK =			0x8E51,
 			// 3.2 Core Profile
 			GL_NUM_EXTENSIONS =			0x821D,
 			// Source Enum Values
@@ -365,9 +367,6 @@ namespace Microsoft.Xna.Framework.Graphics
 		/* END DEPTH/STENCIL STATE FUNCTIONS */
 
 		/* BEGIN RASTERIZER STATE FUNCTIONS */
-
-		private delegate void CullFace(GLenum mode);
-		private CullFace glCullFace;
 
 		private delegate void FrontFace(GLenum mode);
 		private FrontFace glFrontFace;
@@ -929,10 +928,6 @@ namespace Microsoft.Xna.Framework.Graphics
 				glStencilOp = (StencilOp) Marshal.GetDelegateForFunctionPointer(
 					SDL.SDL_GL_GetProcAddress("glStencilOp"),
 					typeof(StencilOp)
-				);
-				glCullFace = (CullFace) Marshal.GetDelegateForFunctionPointer(
-					SDL.SDL_GL_GetProcAddress("glCullFace"),
-					typeof(CullFace)
 				);
 				glFrontFace = (FrontFace) Marshal.GetDelegateForFunctionPointer(
 					SDL.SDL_GL_GetProcAddress("glFrontFace"),
